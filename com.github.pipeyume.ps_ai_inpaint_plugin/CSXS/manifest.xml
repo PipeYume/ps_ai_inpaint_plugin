@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<ExtensionManifest Version="4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.github.pipeyume.ps_ai_inpaint_plugin" ExtensionBundleName="com.github.pipeyume.ps_ai_inpaint_plugin" ExtensionBundleVersion="5.0.18">
+    <Author>PipeYume</Author>
+    <Contact mailto="**@abc.com" />
+    <Abstract href="http://www.superslide2.com/" />
+    <ExtensionList>
+        <Extension Id="com.github.pipeyume.ps_ai_inpaint_plugin" Version="1.0.2" />
+    </ExtensionList>
+
+    <ExecutionEnvironment>
+        <HostList>
+            <!-- 设置插件能在 23.0 版本之后 PhotoShop 中运行-->
+            <Host Name="PHXS" Version="23.0" />
+            <Host Name="PHSP" Version="23.0" />
+            <Host Name="ILST" Version="17.0" />
+        </HostList>
+
+        <LocaleList>
+            <Locale Code="All" />
+        </LocaleList>
+
+        <RequiredRuntimeList>
+            <RequiredRuntime Name="CSXS" Version="11.0" />
+        </RequiredRuntimeList>
+
+    </ExecutionEnvironment>
+    <DispatchInfoList>
+        <Extension Id="com.github.pipeyume.ps_ai_inpaint_plugin">
+            <DispatchInfo>
+                <Resources>
+                    <MainPath>./index.html</MainPath> <!-- 程序入口-->
+                    <ScriptPath>./jsx/main.jsx</ScriptPath> <!-- 插件自动加载的jsx文件 -->
+                </Resources>
+
+                <Lifecycle>
+                    <AutoVisible>true</AutoVisible>
+                    <StartOn></StartOn>
+                </Lifecycle>
+
+                <UI>
+                    <Type>Panel</Type> <!-- 插件模式：面板-->
+                    <Menu>pipeyume-ai-inpaint</Menu> <!-- 插件在面板上的标题-->
+                    <Geometry> <!-- 插件尺寸-->
+                        <Size>
+                            <Height>550</Height>
+                            <Width>300</Width>
+                        </Size>
+                        <MaxSize>
+                            <Height>1200</Height>
+                            <Width>300</Width>
+                        </MaxSize>
+                        <MinSize>
+                            <Height>350</Height>
+                            <Width>300</Width>
+                        </MinSize>
+                    </Geometry>
+                    <Icons><!-- 插件图标-->
+                        <Icon Type="Normal">./img/icon.png</Icon>
+                        <Icon Type="RollOver">./img/icon.png</Icon>
+                        <Icon Type="DarkNormal">./img/icon.png</Icon>
+                        <Icon Type="DarkRollOver">./img/icon.png</Icon>
+                    </Icons>
+                </UI>
+            </DispatchInfo>
+        </Extension>
+    </DispatchInfoList>
+</ExtensionManifest>

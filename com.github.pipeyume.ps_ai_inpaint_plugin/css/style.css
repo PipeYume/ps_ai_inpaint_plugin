@@ -1,0 +1,395 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; /* 确保 padding 不撑开宽度 */
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background: #323232; 
+    color: white; 
+    font-family: sans-serif; 
+    padding: 15px; 
+    font-size: 12px;
+    overflow: visible;
+}
+
+.item { margin-bottom: 12px; }
+
+/* 布局容器 */
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+}
+
+.settings-container {
+    background: #3c3c3c;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid #262626;
+    overflow: visible;
+}
+
+/* 表单行与组 */
+.setting-group {
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.setting-row {
+    display: flex;
+    gap: 15px;
+}
+
+.setting-row .setting-group {
+    flex: 1;
+}
+
+/* 标签 */
+label {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    color: #bbb;
+    display: flex;
+    align-items: center;
+}
+
+/* 输入框与下拉框样式 */
+input, select {
+    width: 100%; 
+    padding: 6px; 
+    background: #454545; 
+    border: 1px solid #1e1e1e; 
+    color: white;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+    border-color: #777;
+}
+
+/* 特殊处理：Checkbox */
+.checkbox-group {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 5px 0;
+}
+
+.checkbox-group label {
+    flex: 0 0 100%;
+    cursor: pointer;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0 8px 0 0;
+    cursor: pointer;
+}
+
+/* 按钮样式 */
+button {
+    width: 100%; 
+    padding: 8px 15px; 
+    background: #0e639c; 
+    border: none; 
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #1177bb;
+}
+
+button:active {
+    background: linear-gradient(#000, #333);
+    box-shadow: none;
+}
+
+.panel-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 0px;
+    padding-top: 0px;
+    border-top: 1px solid #4a4a4a;
+}
+
+textarea {
+    width: 100%;
+    padding: 6px;
+    background: #454545;
+    border: 1px solid #1e1e1e;
+    color: white;
+    font-family: inherit;
+    resize: vertical; /* 允许垂直拉伸 */
+    box-sizing: border-box;
+}
+
+/* 实用工具 */
+hr {
+    border: none;
+    border-top: 1px solid #4a4a4a;
+    margin: 15px 0;
+}
+
+#statusLog { 
+    margin-top: 10px; 
+    font-style: italic; 
+    color: #aaa; 
+}
+
+/* 终止按钮样式 */
+.btn-terminate {
+    position: absolute;
+    right: 10px;
+    top: 8px; /* 固定在顶部，不再使用垂直居中 */
+    transform: none; /* 去除原来的居中偏移 */
+    
+    width: auto; /* 覆盖全局的 width: 100% */
+    padding: 4px 8px; 
+    
+    background: #c0392b;
+    color: white;
+    font-size: 10px;
+    font-weight: normal;
+    border-radius: 3px;
+    cursor: pointer;
+    line-height: 1; 
+    transition: background 0.2s;
+    z-index: 10; 
+}
+
+.btn-terminate:hover {
+    background: #e74c3c;
+}
+
+/* --- 连续生成模块样式 --- */
+
+/* 调试按钮特定颜色 */
+#btnDebugClose {
+    background: #c0392b;
+}
+
+#btnDebugClose:hover {
+    background: #e74c3c;
+}
+
+/* 连续生成容器 */
+.gen-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 12px 0;
+}
+
+.gen-label-text {
+    color: #ccc;
+    font-weight: normal;
+}
+
+/* 单选框组容器 */
+.radio-group-inline {
+    display: flex;
+    gap: 12px;
+}
+
+/* 单选框标签样式 */
+.radio-item {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    cursor: pointer;
+    width: auto;
+    font-weight: normal;
+    color: #ddd;
+}
+
+/* 覆盖全局 input 样式中可能的 width: 100% */
+.radio-item input[type="radio"] {
+    width: auto;
+    margin: 0 4px 0 0;
+    cursor: pointer;
+}
+
+
+/* --- 任务完成后图片对比的预览 --- */
+/* 对比弹窗遮罩（改为绝对定位，防止在 PS 面板中漂移） */
+.preview-overlay {
+    position: absolute; 
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(30, 30, 30, 0.95);
+    z-index: 9999;
+    display: none; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    padding: 15px;
+}
+
+/* 核心对比容器：宽度占满面板，高度由底图撑起 */
+.comparison-slider {
+    position: relative; 
+    width: 100%; 
+    max-width: 100%;
+    /* 增加细边框和阴影让图片更独立 */
+    border: 1px solid #555; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+/* 底图：负责撑开容器的高度 */
+#imgBefore {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 70vh; /* 防止竖版长图超出屏幕 */
+    object-fit: contain;
+}
+
+/* 顶图：绝对定位，覆盖在底图上，尺寸强制与底图一致 */
+#imgAfter {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: contain; /* 防止形变 */
+    clip-path: inset(0 50% 0 0); /* 初始裁剪掉右半边 */
+    pointer-events: none; /* 让鼠标事件穿透到 input */
+}
+
+/* 扫动线及其中心的把手 */
+.slider-line {
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 2px;
+    background: #ffffff;
+    transform: translateX(-50%);
+    pointer-events: none;
+    box-shadow: 0 0 4px rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 隐形滑动条，覆盖在最上层接收用户的拖动指令 */
+.slider-input {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0;
+    cursor: ew-resize; /* 左右拖动的鼠标指针 */
+    margin: 0;
+}
+
+/* 关闭按钮样式优化 */
+.preview-close {
+    margin-top: 20px; 
+    padding: 10px; 
+    width: 100%;
+    background: #c0392b; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+.preview-close:hover { background: #e74c3c; }
+
+.preview-btn-group {
+    display: flex;
+    flex-direction: row; /* 横向排列 */
+    flex-wrap: wrap;     /* 空间不够时自动换行 */
+    gap: 8px;            /* 按钮之间的间距 */
+    margin-top: 10px;    /* 距离上面文本的距离 */
+    padding-top: 8px;
+    border-top: 1px dashed #444; /* 加一条细虚线作为分割线，更好看 */
+}
+
+/* 强制覆盖全局的 button 样式 */
+.preview-btn-group button.btn-preview-mini {
+    width: auto !important; /* 强制取消 100% 宽度 */
+    padding: 4px 10px !important;
+    background: #0e639c; /* 与主题一致的蓝色 */
+    color: white;
+    font-size: 11px;
+    font-weight: normal;
+    border-radius: 12px; /* 圆角胶囊形状更好看 */
+    border: 1px solid #1a7ebc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.preview-btn-group button.btn-preview-mini:hover {
+    background: #1177bb;
+}
+
+
+/* 定义滚动条样式，使其更符合 PS 风格 */
+#taskList::-webkit-scrollbar { 
+    width: 4px; 
+}
+#taskList::-webkit-scrollbar-thumb { 
+    background: #666; 
+    border-radius: 2px; 
+}
+
+/* 合并后的 .task-item 样式 */
+.task-item { 
+    background: #333; 
+    margin: 5px; 
+    padding: 10px; 
+    padding-right: 30px; /* 从原 style.css 保留，为右侧按钮留出空间 */
+    border-radius: 4px; 
+    border-left: 4px solid #0e639c; 
+    position: relative; /* 确保 task-item 是定位基准 */
+    word-break: break-word;
+}
+
+/* 任务完成后不显示按钮 */
+.task-item.is-done .btn-terminate {
+    display: none;
+}
+
+.task-id { 
+    font-size: 10px; 
+    color: #888; 
+    margin-bottom: 4px; 
+}
+
+.task-status { 
+    color: #aaa; 
+}
+
+/* 状态颜色状态 */
+.status-success { 
+    border-left-color: #51cf66 !important; 
+}
+.status-success .task-status { 
+    color: #51cf66; 
+}
+.status-error { 
+    border-left-color: #ff6b6b !important; 
+}
+.status-error .task-status { 
+    color: #ff6b6b; 
+}

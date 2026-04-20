@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pipeyume-ai-inpaint</title>
+    <link href="./css/style.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+    <button id="btnDebugClose">[DEBUG] 关闭扩展</button>
+    <button id="btnRunInpaint">🚀 执行重绘任务</button>
+    <!-- 连续生成 -->
+    <div class="gen-container">
+        <span class="gen-label-text">连续生成:</span>
+        <div class="radio-group-inline">
+            <label class="radio-item">
+                <input type="radio" name="genCount" value="1" checked> 1次
+            </label>
+            <label class="radio-item">
+                <input type="radio" name="genCount" value="2"> 2次
+            </label>
+            <label class="radio-item">
+                <input type="radio" name="genCount" value="3"> 3次
+            </label>
+            <label class="radio-item">
+                <input type="radio" name="genCount" value="4"> 4次
+            </label>
+        </div>
+    </div>
+
+    <button id="btnOpenTemp" style="background: #444;">📂 打开缓存目录</button>
+    <button id="btnOpenConfig" style="background: #444;">📂 打开配置目录</button>
+
+    <div class="item">
+        <button id="btnToggleSettings" style="background:#444">⚙️ 服务与参数设置</button>
+    </div>
+
+    <!-- 设置 -->
+    <div id="setting-panel" class="settings-container" style="display: none;">
+        <div class="panel-actions">
+            <button id="btnSave">保存设置</button>
+            <button id="btnReset">恢复默认</button>
+        </div>
+        <div class="setting-group">
+            <label>API Key:</label>
+            <div style="position: relative; display: flex; align-items: center;">
+                <input type="password" id="api-key" placeholder="输入 API Key" style="padding-right: 30px; flex: 1;">
+                <span id="toggle-key" 
+                    style="position: absolute; right: 8px; cursor: pointer; font-size: 14px; filter: grayscale(1); user-select: none;"
+                    onclick="const el = document.getElementById('api-key'); if(el.type === 'password') { el.type = 'text'; this.innerText = '👁️'; } else { el.type = 'password'; this.innerText = '🙈'; }">
+                    🙈
+                </span>
+            </div>
+        </div>
+        <div class="setting-group">
+            <label>模型:</label>
+            <select id="field-model">
+                <option value="nai-diffusion-4-5-full">v4.5-full</option>
+                <option value="nai-diffusion-4-5-curated">v4.5-curated</option>
+                <option value="nai-diffusion-4-full">v4-full</option>
+                <option value="nai-diffusion-4-curated">v4-curated</option>
+                <option value="nai-diffusion-3">v3</option>
+            </select>
+        </div>
+        <div class="setting-group">
+            <label>分辨率:</label>
+            <select id="field-resolution">
+                <option value="1024x1024">1024x1024</option>
+                <option value="832x1216">832x1216</option>
+                <option value="1216x832">1216x832</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <div class="setting-group">
+            <label>正面提示词:</label>
+            <textarea id="field-positivePrompt" rows="3" placeholder="描述你想要生成的内容..."></textarea>
+        </div>
+
+        <div class="setting-group">
+            <label>负面提示词:</label>
+            <textarea id="field-negativePrompt" rows="2" placeholder="不希望出现的内容..."></textarea>
+        </div>
+
+        <!-- 重绘核心参数 -->
+        <div class="setting-group">
+            <label>采样算法:</label>
+            <select id="field-sampler">
+                <option value="k_euler">Euler</option>
+                <option value="k_euler_ancestral">Euler Ancestral</option>
+                <option value="k_dpmpp_2s_ancestral">DPM++ 2S Ancestral</option>
+                <option value="k_dpmpp_2m">DPM++ 2M</option>
+                <option value="k_dpmpp_sde">DPM++ SDE</option>
+                <option value="k_dpm_2">DPM2</option>
+                <option value="k_dpm_2_ancestral">DPM2 Ancestral</option>
+                <option value="ddim">DDIM</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label>噪声调度:</label>
+            <select id="field-noise_schedule">
+                <option value="karras">Karras</option>
+                <option value="exponential">Exponential</option>
+                <option value="polyexponential">Polyexponential</option>
+            </select>
+        </div>
+
+        <div class="setting-row">
+            <div class="setting-group">
+                <label>重绘强度:</label>
+                <input type="number" id="field-inpaint_strength" step="0.1" min="0" max="1">
+            </div>
+            <div class="setting-group">
+                <label>提示词相关性:</label>
+                <input type="number" id="field-scale" step="0.5" min="1" max="10">
+            </div>
+        </div>
+
+        <div class="setting-row">
+            <div class="setting-group">
+                <label>步数:</label>
+                <input type="number" id="field-steps" min="1" max="28">
+            </div>
+            <div class="setting-group">
+                <label>负面预设:</label>
+                <select id="field-ucPreset">
+                    <option value="1">Light</option>
+                    <option value="0">Heavy</option>
+                    <option value="2">Human Focus</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="setting-group checkbox-group">
+            <label>
+                <input type="checkbox" id="field-color_correct"> 色彩校正
+            </label>
+            <label>
+                <input type="checkbox" id="field-disabled_original_image"> 禁用原图参考
+            </label>
+            <label>
+                <input type="checkbox" id="field-qualityToggle"> 高质量正面预设
+            </label>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-bottom: 5px; border-bottom: 1px solid #444;">
+        <span style="font-weight: bold; color: #ccc;">任务队列</span>
+        <button id="btnClearCompleted" style="width: auto; padding: 2px 8px; background: #555; font-size: 10px;">🧹 清除已完成</button>
+        <button id="btnClearError" style="width: auto; padding: 2px 8px; background: #555; font-size: 10px;">🧹 清除错误</button>
+    </div>
+
+    <div id="taskList" style="margin-top: 5px; height: 280px; overflow-y: auto; background: #252525; border-radius: 4px;"></div>
+
+    <div id="previewOverlay" class="preview-overlay">
+        <div class="comparison-slider" id="sliderContainer">
+            <img id="imgBefore" src="" alt="Before">
+            <img id="imgAfter" src="" alt="After">
+            <div class="slider-line" id="sliderLine"></div>
+            <input title="comparison-slider-range" type="range" min="0" max="100" value="50" class="slider-input" id="sliderRange">
+        </div>
+        <button class="preview-close" onclick="closePreview()">关闭预览</button>
+    </div>
+
+    <script src="js/CSInterface.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/debug.js"></script>
+    <script src="js/imageProcessor.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
